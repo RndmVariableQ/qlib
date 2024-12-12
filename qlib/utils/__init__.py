@@ -628,6 +628,7 @@ def exists_qlib_data(qlib_dir):
         .loc[:, 0]
         .apply(str.lower)
     ) - set(code_names)
+    
     if miss_code and any(map(lambda x: "sht" not in x, miss_code)):
         return False
 

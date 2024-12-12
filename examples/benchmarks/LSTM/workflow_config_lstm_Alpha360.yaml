@@ -57,7 +57,7 @@ task:
             batch_size: 800
             metric: loss
             loss: mse
-            GPU: 0
+            GPU: 1
     dataset:
         class: DatasetH
         module_path: qlib.data.dataset

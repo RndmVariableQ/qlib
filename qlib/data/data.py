@@ -613,7 +613,7 @@ class DatasetProvider(abc.ABC):
         for field in column_names:
             #  The client does not have expression provider, the data will be loaded from cache using static method.
             obj[field] = ExpressionD.expression(inst, field, start_time, end_time, freq)
-
+        
         data = pd.DataFrame(obj)
         if not data.empty and not np.issubdtype(data.index.dtype, np.dtype("M")):
             # If the underlaying provides the data not in datetime format, we'll convert it into datetime format

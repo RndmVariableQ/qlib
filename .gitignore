@@ -28,6 +28,7 @@ examples/rl/checkpoints/
 examples/rl/outputs/
 examples/rl_order_execution/data/
 examples/rl_order_execution/outputs/
+examples/git_ignore_folder
 
 *.egg-info/
 
@@ -49,3 +50,4 @@ tags
 
 ./pretrain
 .idea/
+./examples/log

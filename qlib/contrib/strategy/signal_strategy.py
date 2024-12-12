@@ -302,7 +302,7 @@ class WeightStrategyBase(BaseSignalStrategy):
     # 3. Supporting checking the availability of trade decision
     def __init__(
         self,
-        *,
+        # *args,
         order_generator_cls_or_obj=OrderGenWOInteract,
         **kwargs,
     ):

@@ -55,7 +55,7 @@ def cal_mean_std(results) -> dict:
     for fn in results:
         mean_std[fn] = dict()
         for metric in results[fn]:
-            mean = statistics.mean(results[fn][metric]) if len(results[fn][metric]) > 1 else results[fn][metric][0]
+            mean = statistics.mean(results[fn][metric]) if len(results[fn][metric]) > 1 else 0
             std = statistics.stdev(results[fn][metric]) if len(results[fn][metric]) > 1 else 0
             mean_std[fn][metric] = [mean, std]
     return mean_std
@@ -67,7 +67,7 @@ def create_env():
     temp_dir = tempfile.mkdtemp()
     env_path = Path(temp_dir).absolute()
     sys.stderr.write(f"Creating Virtual Environment with path: {env_path}...\n")
-    execute(f"conda create --prefix {env_path} python=3.7 -y")
+    execute(f"conda create --prefix {env_path} python=3.8 -y")
     python_path = env_path / "bin" / "python"  # TODO: FIX ME!
     sys.stderr.write("\n")
     # get anaconda activate path
@@ -220,6 +220,7 @@ class ModelRunner:
         )
 
     # function to run the all the models
+    # python run_all_model.py run --models=[lightgbm] --times 1 --qlib_uri /home/tangziyi/qlib
     @only_allow_defined_args
     def run(
         self,
@@ -326,7 +327,7 @@ class ModelRunner:
                     f"{python_path} -m pip install light-the-torch", wait_when_err=wait_when_err
                 )  # for automatically installing torch according to the nvidia driver
                 execute(
-                    f"{env_path / 'bin' / 'ltt'} install --install-cmd '{python_path} -m pip install {{packages}}' -- -r {req_path}",
+                    f"{python_path} -m pip install -r {req_path}",
                     wait_when_err=wait_when_err,
                 )
             else:

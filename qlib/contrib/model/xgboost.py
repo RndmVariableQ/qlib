@@ -72,7 +72,7 @@ class XGBModel(Model, FeatureInt):
         if self.model is None:
             raise ValueError("model is not fitted yet!")
         x_test = dataset.prepare(segment, col_set="feature", data_key=DataHandlerLP.DK_I)
-        return pd.Series(self.model.predict(xgb.DMatrix(x_test)), index=x_test.index)
+        return pd.Series(self.model.predict(xgb.DMatrix(x_test), validate_features=False), index=x_test.index)
 
     def get_feature_importance(self, *args, **kwargs) -> pd.Series:
         """get feature importance

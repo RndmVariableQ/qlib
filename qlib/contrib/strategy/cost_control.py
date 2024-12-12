@@ -37,7 +37,7 @@ class SoftTopkStrategy(WeightStrategyBase):
                 average_fill: assign the weight to the stocks rank high averagely.
         """
         super(SoftTopkStrategy, self).__init__(
-            model, dataset, order_generator_cls_or_obj, trade_exchange, level_infra, common_infra, **kwargs
+            order_generator_cls_or_obj, model=model, dataset=dataset, trade_exchange=trade_exchange, level_infra=level_infra, common_infra=common_infra, **kwargs
         )
         self.topk = topk
         self.max_sold_weight = max_sold_weight

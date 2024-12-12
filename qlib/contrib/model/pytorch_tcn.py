@@ -176,7 +176,7 @@ class TCN(Model):
 
             feature = torch.from_numpy(x_train_values[indices[i : i + self.batch_size]]).float().to(self.device)
             label = torch.from_numpy(y_train_values[indices[i : i + self.batch_size]]).float().to(self.device)
-
+            import pdb; pdb.set_trace()
             pred = self.tcn_model(feature)
             loss = self.loss_fn(pred, label)
 
