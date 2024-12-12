@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 import time
 from tqdm import tqdm
-import os
+from pathlib import Path
 from dateutil.relativedelta import relativedelta
 
 def get_all_stocks_in_period(start_date, end_date):
@@ -54,9 +54,11 @@ def download_stock_data(start_date, end_date, output_dir):
         end_date (str): 结束日期，格式：YYYY-MM-DD
         output_dir (str): 输出文件夹路径
     """
-    # 创建输出目录
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    # 将输出目录转换为Path对象并展开用户目录（~）
+    output_path = Path(output_dir).expanduser()
+    
+    # 创建输出目录（如果父目录不存在，也会创建）
+    output_path.mkdir(parents=True, exist_ok=True)
     
     # 登录系统
     lg = bs.login()
@@ -74,10 +76,10 @@ def download_stock_data(start_date, end_date, output_dir):
         # 对每个股票代码进行数据下载
         for code in tqdm(all_stocks, desc="下载进度"):
             # 构建输出文件路径
-            output_file = os.path.join(output_dir, f"{code}.csv")
+            output_file = output_path / f"{code.replace('.', '')}.csv"
             
             # 如果文件已存在则跳过
-            if os.path.exists(output_file):
+            if output_file.exists():
                 continue
                 
             try:
@@ -103,6 +105,8 @@ def download_stock_data(start_date, end_date, output_dir):
                 # 转换为DataFrame并保存
                 if data_list:
                     result = pd.DataFrame(data_list, columns=rs.fields)
+                    if 'code' in result.columns:
+                        result['code'] = result['code'].str.replace('.', '', regex=False)
                     result.to_csv(output_file, index=False, encoding='utf-8')
                     
                 # 添加延时避免请求过于频繁
@@ -118,13 +122,11 @@ def download_stock_data(start_date, end_date, output_dir):
 
 if __name__ == '__main__':
     # 设置参数
-    START_DATE = '2018-12-01'
-    END_DATE = '2024-12-01'
-    DATA_DIR = '~/.qlib/qlib_data/my_data/baostock_raw/'
+    START_DATE = '2016-12-11'
+    END_DATE = '2024-12-11'
+    DATA_DIR = '~/.qlib/qlib_data/my_data/baostock_raw_2016-2024'
     
     # 下载数据
-    # sh.000xxx: 上海交易所指数
-    # sz.399xxx：深圳交易所指数
     print("开始下载股票数据...")
     download_stock_data(START_DATE, END_DATE, DATA_DIR)
     
